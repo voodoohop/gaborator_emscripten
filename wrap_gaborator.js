@@ -1787,8 +1787,8 @@ var ASM_CONSTS = [];
 
 STATIC_BASE = GLOBAL_BASE;
 
-STATICTOP = STATIC_BASE + 26496;
-/* global initializers */  __ATINIT__.push({ func: function() { __GLOBAL__I_000101() } }, { func: function() { ___cxx_global_var_init_2() } }, { func: function() { __GLOBAL__sub_I_wrap_gaborator_cc() } }, { func: function() { __GLOBAL__sub_I_bind_cpp() } }, { func: function() { __GLOBAL__sub_I_iostream_cpp() } });
+STATICTOP = STATIC_BASE + 26544;
+/* global initializers */  __ATINIT__.push({ func: function() { __GLOBAL__I_000101() } }, { func: function() { ___cxx_global_var_init_3() } }, { func: function() { __GLOBAL__sub_I_wrap_gaborator_cc() } }, { func: function() { __GLOBAL__sub_I_bind_cpp() } }, { func: function() { __GLOBAL__sub_I_iostream_cpp() } });
 
 
 
@@ -1796,7 +1796,7 @@ STATICTOP = STATIC_BASE + 26496;
 
 
 
-var STATIC_BUMP = 26496;
+var STATIC_BUMP = 26544;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 
@@ -7708,10 +7708,10 @@ var real____cxa_is_pointer_type = asm["___cxa_is_pointer_type"]; asm["___cxa_is_
   return real____cxa_is_pointer_type.apply(null, arguments);
 };
 
-var real____cxx_global_var_init_2 = asm["___cxx_global_var_init_2"]; asm["___cxx_global_var_init_2"] = function() {
+var real____cxx_global_var_init_3 = asm["___cxx_global_var_init_3"]; asm["___cxx_global_var_init_3"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
-  return real____cxx_global_var_init_2.apply(null, arguments);
+  return real____cxx_global_var_init_3.apply(null, arguments);
 };
 
 var real____errno_location = asm["___errno_location"]; asm["___errno_location"] = function() {
@@ -7856,10 +7856,10 @@ var ___cxa_is_pointer_type = Module["___cxa_is_pointer_type"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
   return Module["asm"]["___cxa_is_pointer_type"].apply(null, arguments) };
-var ___cxx_global_var_init_2 = Module["___cxx_global_var_init_2"] = function() {
+var ___cxx_global_var_init_3 = Module["___cxx_global_var_init_3"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
-  return Module["asm"]["___cxx_global_var_init_2"].apply(null, arguments) };
+  return Module["asm"]["___cxx_global_var_init_3"].apply(null, arguments) };
 var ___errno_location = Module["___errno_location"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');

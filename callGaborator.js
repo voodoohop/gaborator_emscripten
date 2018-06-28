@@ -20,15 +20,17 @@ const em_module = require('./wrap_gaborator.js');
 
 // testGaborator();
 
-const width=800;
-const height=600;
+const width=1024;
+const height=768;
 
 const { createCanvas, loadImage } = require('canvas')
 const canvas = createCanvas(width, height)
 const ctx = canvas.getContext('2d')
-ctx.fillStyle = 'black';
-ctx.fillRect(0,0,width,height);
-ctx.strokeStyle='rgba(0,0,0,0)'
+ctx.globalCompositeOperation = 'lighten';
+ctx.antialias = 'subpixel'
+ctx.fillStyle = 'rgba(0,0,0,1)';
+ctx.fillRect(0,0,canvas.width,canvas.height);
+// ctx.strokeStyle='rgba(0,0,0,0)'
 // Write "Awesome!"
 // ctx.font = '30px Impact'
 // ctx.rotate(0.1)
@@ -43,14 +45,18 @@ ctx.strokeStyle='rgba(0,0,0,0)'
 // ctx.stroke()
 // const totalBands = 120;
 
-function pixel(x,y, intensity,totalBands) {
-    const r=1;
-    const g=1;
-    const b=1;
-    const a=intensity;
-    ctx.fillStyle = "rgba("+(r*255)+","+(g*255)+","+(b*255)+","+(a)+")";
+function pixel(x,band, intensity,totalBands, totalSamples) {
+    const r = 1;
+    const g = r;
+    const b = r;
+    // console.log(intensity)
+    let a = Math.min(Math.max(0, Math.log(intensity*100.0+1.0 )),1);
+    if (a > 0.000) {    
+        // console.log(a);
+        ctx.fillStyle = "rgba("+(r*255)+","+(g*255)+","+(b*255)+","+(a)+")";
     // console.log("rgba("+(r*255)+","+(g*255)+","+(b*255)+","+(a)+")");
-    ctx.fillRect(x*width, y*height, 1/1.0,  height/totalBands);
+        ctx.fillRect(x*width/totalSamples, band*height/totalBands, 5.0,  height/totalBands);
+    }
 }
 
 // pixel(1,1,0,0,0);
@@ -71,25 +77,27 @@ const m = em_module();
 
         let maxIntensity = -Infinity;
         let minIntensity  = Infinity;
-        let numBands = -Infinity;
-        loader("./media/smoothsine.wav").then(audio =>   {
-            const gaborator= new ThomashGaborator(audio.sampleRate,48,20.0      );
+
+        loader("./media/modular.wav").then(audio =>   {
+            const gaborator= new ThomashGaborator(audio.sampleRate,48,20.0);
             const data = audio.getChannelData(0);
             const length = audio.length;
-            gaborator.analyze(data,function(real,imag,band,t)  {
+            // console.log(data);
+            const numBands = gaborator.numBands();
+            // gaborator.analyze(data,function(mag,band,t)  {
+            //     // console.log("resuult",{real,imag,band,t});
+            //     const intensity=mag*mag  ;
+            //     maxIntensity= Math.max(intensity,maxIntensity);
+            //     minIntensity= Math.min(intensity,minIntensity);
+            //     // numBands = Math.max(band,numBands)
+            //     // console.log(t/length, band/72, 0,0,0,intensity)
+            // });
+            // console.log({maxIntensity,minIntensity,numBands});
+            gaborator.analyze(data,function(mag,band,t)  {
                 // console.log("resuult",{real,imag,band,t});
-                const intensity=(real)  ;
-                maxIntensity= Math.max(intensity,maxIntensity);
-                minIntensity= Math.min(intensity,minIntensity);
-                numBands = Math.max(band,numBands)
-                // console.log(t/length, band/72, 0,0,0,intensity)
-            });
-            console.log({maxIntensity,minIntensity,numBands});
-            gaborator.analyze(data,function(real,imag,band,t)  {
-                // console.log("resuult",{real,imag,band,t});
-                const intensity=(real) ;
-                const normalizedIntensity=(intensity-minIntensity)/(maxIntensity-minIntensity) ;
-                pixel(t/length, band/numBands, intensity,numBands);
+                const intensity=mag;
+                const normalizedIntensity= intensity;//(intensity-minIntensity)/(maxIntensity-minIntensity) ;
+                pixel(t, band, normalizedIntensity,numBands,length);
 
                 // console.log(t/length, band/72, 0,0,0,intensity)
             });

@@ -54,8 +54,10 @@ class ThomashGaborator {
             {
                 analysis_support = ceil(analyzer.analysis_support());
                 synthesis_support = ceil(analyzer.synthesis_support());
+                bandpass_bands_begin = analyzer.bandpass_bands_begin();
+                bandpass_bands_end = analyzer.bandpass_bands_end();
                 std::cerr << "latency: " << analysis_support + synthesis_support << " samples\n";
-                printf("loaded gaborator\n"); 
+                printf("loaded gaborator bands: %i - %i \n",bandpass_bands_begin,bandpass_bands_end); 
             };
         void analyze(const emscripten::val &samples, emscripten::val callback) {
             std::vector<float> mono;
@@ -74,25 +76,31 @@ class ThomashGaborator {
             apply(analyzer, coefs,
                 [&](std::complex<float> &coef, int band, int64_t t) {
                     //  printf("applying %lld\n",t);
-                    callback(coef.real(), coef.imag() ,band, (int) t);
+                    callback(std::abs(coef) ,band, (int) t);
                 }); 
             printf("analyzed\n"); 
             //  callback(12);
 
         };
-        
+        int numBands() {
+           return bandpass_bands_end - bandpass_bands_begin;
+        };
     private:
         gaborator::parameters params;
         gaborator::analyzer<float> analyzer;
         gaborator::coefs<float> coefs;
         size_t analysis_support;
         size_t synthesis_support;
+        int bandpass_bands_end;
+        int bandpass_bands_begin;
+        
 };
 
 EMSCRIPTEN_BINDINGS(gaborator_binding) {
   emscripten::class_<ThomashGaborator>("ThomashGaborator")
     .constructor<float,int,float>()
     .function("analyze", &ThomashGaborator::analyze)
+    .function("numBands", &ThomashGaborator::numBands   )
     // .property("x", &MyClass::getX, &MyClass::setX)
     // .class_function("getStringFromInstance", &MyClass::getStringFromInstance)
     ;

@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
         for (size_t c = 0; c < (size_t)sfinfo.channels; c++)
             v += audio[i * sfinfo.channels + c];
         mono[i] = v;
+        // printf("%f\n",v);
     }
     gaborator::parameters params(48, 20.0 / fs, 440.0 / fs);
     gaborator::analyzer<float> analyzer(params);
