@@ -47,8 +47,8 @@ void copyToVector(const emscripten::val &typedArray, std::vector<T> &vec)
 
 class ThomashGaborator {
     public:
-        ThomashGaborator(float sampleRate):
-            params(12, 200.0 / sampleRate, 440.0 / sampleRate),
+        ThomashGaborator(float sampleRate, int binsPerOctave, float lowFrequency):
+            params(binsPerOctave, lowFrequency / sampleRate, 440.0 / sampleRate),
             analyzer(params),
             coefs(analyzer)
             {
@@ -73,7 +73,7 @@ class ThomashGaborator {
             //  }
             apply(analyzer, coefs,
                 [&](std::complex<float> &coef, int band, int64_t t) {
-                     printf("applying %lld\n",t);
+                    //  printf("applying %lld\n",t);
                     callback(coef.real(), coef.imag() ,band, (int) t);
                 }); 
             printf("analyzed\n"); 
@@ -91,7 +91,7 @@ class ThomashGaborator {
 
 EMSCRIPTEN_BINDINGS(gaborator_binding) {
   emscripten::class_<ThomashGaborator>("ThomashGaborator")
-    .constructor<float>()
+    .constructor<float,int,float>()
     .function("analyze", &ThomashGaborator::analyze)
     // .property("x", &MyClass::getX, &MyClass::setX)
     // .class_function("getStringFromInstance", &MyClass::getStringFromInstance)
